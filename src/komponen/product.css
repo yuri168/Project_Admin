@@ -1,0 +1,11 @@
+.pic{
+    
+    height: 10%;
+}
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}

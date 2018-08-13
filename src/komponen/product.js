@@ -56,7 +56,7 @@ class product extends Component {
             return (< Redirect to='/' />)
         }
 
-        const foldergambar = "http://localhost:3222/img/";
+        const foldergambar = "http://localhost:3000/image/";
         
 
         const data = this.state.dataBackend.map((item, i) => {

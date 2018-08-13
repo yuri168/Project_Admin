@@ -69,7 +69,7 @@ class edit extends Component {
                 Deskripsi
                                 <br />
                 <textarea rows="4" cols="50" name="comment" ref="desc" >
-                    Enter text here...</textarea>
+                    </textarea>
 
                 <br />
                 Stock

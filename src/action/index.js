@@ -18,3 +18,9 @@ export const idInvoice = (x) =>{
         payload: x
     }
 }
+export const kategoriID = (x) =>{
+    return{
+        type: 'idKategori',
+        payload: x
+    }
+}

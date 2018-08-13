@@ -57,7 +57,7 @@ class edit extends Component {
             <div>
                 <div>
                 <h3>
-                    Add Product
+                    Edit Product
                 </h3>
                 <br />
                 Nama Produk

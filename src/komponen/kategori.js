@@ -3,11 +3,11 @@ import Axios from 'axios';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-class product extends Component {
+class kategori extends Component {
     state = {
         redirect_product: false,
         userfile: '',
-        ktg:[]
+        ktg:[],
     };
 
     componentWillMount() {
@@ -20,6 +20,7 @@ class product extends Component {
             alert("anda belum login")
             this.setState({ redirect_home: true })
         }
+
     }
 
     onchangefile = (event) => {
@@ -32,6 +33,22 @@ class product extends Component {
         console.log(this.state.userfile)
     }
 
+    submitprod() {
+        if(this.refs.namas.value == ''){
+            alert('Mohon di isi')
+        }
+        else{
+        var url = `http://localhost:3222/addkategori`
+        Axios.post(url, {
+            nama: this.refs.namas.value,
+        }).then((respon) => {
+            if (respon.data === 'sukses') {
+                alert("Add to Kategori")
+            this.setState({ redirect_product: true })  }
+        })
+    }  
+    }
+
     bodykategori() {
         var url = `http://localhost:3222/kategori`;
         Axios.get(url).then((ambilData) => {
@@ -40,39 +57,6 @@ class product extends Component {
                 ktg: ambilData.data,
             })
         })
-    }
-
-    submitprod() {
-        if(this.refs.namas.value == '' || this.refs.desc.value == '' || this.refs.qty.value == '' || this.refs.harga.value === '' || this.refs.kategori.value ==''){
-            alert('Mohon di isi dengan lengkap')
-        }
-          else{                   
-        var url = `http://localhost:3222/addProduct`
-        Axios.post(url, {
-
-            nama: this.refs.namas.value,
-            describ: this.refs.desc.value,
-            jumlah: this.refs.qty.value,
-            harga: this.refs.harga.value,
-            kategori: this.refs.kategori.value
-
-        })
-            .then((respon) => {
-                if (respon.data === 'sukses') {
-                    
-                    const { userfile } = this.state;
-                    let formData = new FormData();
-                    formData.append('userfile', userfile);
-                    Axios.post('http://localhost:3222/gambar', formData).then((result) => {
-                        // console.log(formData);
-                        if (result.data === 'sukses') {
-                        alert("Add to Product")
-                    this.setState({ redirect_product: true })  }
-                    });
-                     
-                }
-            })
-        }
     }
 
     render() {
@@ -105,8 +89,8 @@ class product extends Component {
 
         return (
             <div>
-                <div>
-                <h4> Table Kategori </h4>
+            <div className="body">
+            <h4> Table Kategori </h4>
             <table>
                     <tbody>
                     <tr>
@@ -120,48 +104,19 @@ class product extends Component {
                     {data}
                     </tbody>
             </table>
-                </div>
+            </div>
+
                 <div>
                     <h3>
                         Add Product
                 </h3>
                     <br />
-                    Masukan ID Kategori nya
-                                <br />
-                    <input
-                        className="text" placeholder="ID kategori" type="text" ref="kategori"
-                    />
-                    <br />
-                    <br />
-                    Nama Produk
+                    Nama kategori
                                 <br />
                     <input
                         className="text" placeholder="Nama Produk" type="text" ref="namas"
                     />
                     <br />
-                    Deskripsi
-                                <br />
-                    <textarea rows="4" cols="50" name="comment" ref="desc" >
-                    </textarea>
-
-                    <br />
-                    Stock
-                                <br />
-                    <input
-                        className="text" placeholder="QTY" type="number" ref="qty"
-                    />
-                    <br />
-                    Harga
-                                <br />
-                    <input
-                        className="text" placeholder="Harga" type="number" ref="harga"
-                    />
-                    <br />
-                    <input name='userfile' ref='data' type='file' onChange={this.onchangefile} />
-
-                    {/* image
-                                <br />
-                <input type="file" name="pic" accept="image/*"/> */}
                 </div>
                 <br />
                 <button
@@ -177,4 +132,4 @@ const mapStateToProps = (state) => {
     return { idLogin };
 
 };
-export default connect(mapStateToProps)(product);
+export default connect(mapStateToProps)(kategori);

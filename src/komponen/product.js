@@ -3,23 +3,25 @@ import Axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './product.css'
-import { productID } from '../action';
+import { productID, kategoriID } from '../action';
 
 class product extends Component {
     state = {
         dataBackend: [],
+        ktg: [],
         redirect_home: false,
     };
 
     componentDidMount() {
-        {this.check()}
+        { this.check() }
+        { this.bodykategori() }
 
     }
-    check(){
-        if (this.props.idLogin === 1){
-            {this.body()}
+    check() {
+        if (this.props.idLogin === 1) {
+            { this.body() }
         }
-        else{
+        else {
             alert("anda belum login")
             this.setState({ redirect_home: true })
         }
@@ -27,27 +29,52 @@ class product extends Component {
 
     gettempid = (x) => {
         this.props.productID(x);
-      }
+    }
+
+    gettempidktg = (x) => {
+        this.props.kategoriID(x);
+    }
 
     body() {
         var url = `http://localhost:3222/bodyadmin`;
         Axios.get(url).then((ambilData) => {
+            console.log(ambilData.data)
             this.setState({
                 dataBackend: ambilData.data,
-
             })
         })
     }
 
-    delete(id){
+    delete(id) {
         var url = `http://localhost:3222/productDelete`
-    Axios.post(url, {
-      idprod: id,
-    })
-      .then((respon) => {
-        {this.body()}
-      })
-    }    
+        Axios.post(url, {
+            idprod: id,
+        })
+            .then((respon) => {
+                { this.body() }
+            })
+    }
+
+
+    bodykategori() {
+        var url = `http://localhost:3222/kategori`;
+        Axios.get(url).then((ambilData) => {
+            console.log(ambilData.data)
+            this.setState({
+                ktg: ambilData.data,
+            })
+        })
+    }
+
+    deletekategori(id) {
+        var url = `http://localhost:3222/kategoriDelete`
+        Axios.post(url, {
+            idkategori: id,
+        })
+            .then((respon) => {
+                { this.bodykategori() }
+            })
+    }
 
     render() {
         const { redirect_home } = this.state;
@@ -56,8 +83,34 @@ class product extends Component {
             return (< Redirect to='/' />)
         }
 
+        const dataktg = this.state.ktg.map((item, i) => {
+            var id = item.idkategori
+            var nama = item.namakategori
+            return (
+                <tr key={i}>
+                    <td>
+                        {id}
+                    </td>
+                    <td>
+                        {nama}
+                    </td>
+                    <td>
+                        <button>
+                        <Link to={`/editkategori/${id}`} onClick={() => this.gettempidktg(id)}>
+                                edit
+                        </Link>
+                        </button>
+                        <button onClick={() => { this.deletekategori(id) }} >
+                            delete
+                        </button>
+                    </td>
+                </tr>
+            )
+        })
+
+
+
         const foldergambar = "http://localhost:3000/image/";
-        
 
         const data = this.state.dataBackend.map((item, i) => {
             var no = i + 1
@@ -67,6 +120,7 @@ class product extends Component {
             var describe = item.desc
             var harga = item.harga
             var jumlah = item.stock
+            var idkategori = item.namakategori
             return (
                 <tr key={i}>
                     <td>
@@ -88,16 +142,16 @@ class product extends Component {
                         {jumlah}
                     </td>
                     <td>
+                        {idkategori}
+                    </td>
+                    <td>
                         <button>
-                        <Link to= {`/editProduct/${idp}`} onClick={()=>this.gettempid(idp)}>
-                             edit 
+                            <Link to={`/editProduct/${idp}`} onClick={() => this.gettempid(idp)}>
+                                edit
                         </Link>
                         </button>
-                        <br />
-                        <button onClick={() => {this.delete(idp)}} > 
-                       
-                            delete 
-                       
+                        <button onClick={() => { this.delete(idp) }} >
+                            delete
                             </button>
                     </td>
 
@@ -107,45 +161,74 @@ class product extends Component {
         })
         return (
             <div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>
-                                NO
+                <div className="body">
+                    <h4> Table Kategori </h4>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    id
+                        </th>
+                                <th>
+                                    Nama
+                        </th>
+                            </tr>
+                        </tbody>
+                        {dataktg}
+                    </table>
+                </div>
+                <div className="body">
+                    <h4> Table Produk </h4>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    NO
                             </th>
-                            <th>
-                                Nama Produk
+                                <th>
+                                    Nama Produk
                             </th>
-                            <th>
-                                gambar
+                                <th>
+                                    gambar
                             </th>
-                            <th>
-                                desc
+                                <th>
+                                    desc
                             </th>
-                            <th>
-                                harga
+                                <th>
+                                    harga
                             </th>
-                            <th>
-                                QTY
+                                <th>
+                                    QTY
                             </th>
-                            <th>
+                                <th>
+                                    Kategori
                             </th>
-                        </tr>
-                        {data}
-                    </tbody>
-                </table>
+                                <th>
+                                </th>
+                            </tr>
+                            {data}
+                        </tbody>
+                    </table>
 
-                <button>
-                    <Link to="/Addproduct">
-                        add Product
+                    <button>
+                        <Link to="/Addproduct">
+                            add Product
                     </Link>
-                </button>
-                <br/>
-                <button>
-                    <Link to="/Invoice">
-                        Detail Invoice
+                    </button>
+                    <br />
+                    <button>
+                        <Link to="/kategori">
+                            add kategori
                     </Link>
-                </button>
+                    </button>
+                    <br />
+                    <button>
+                        <Link to="/Invoice">
+                            Detail Invoice
+                    </Link>
+                    </button>
+
+                </div>
             </div>
         );
     }
@@ -154,6 +237,6 @@ const mapStateToProps = (state) => {
 
     const idLogin = state.idLogin
     return { idLogin };
-  
-  };
-  export default connect(mapStateToProps,{productID}) (product);
+
+};
+export default connect(mapStateToProps, { productID, kategoriID })(product);

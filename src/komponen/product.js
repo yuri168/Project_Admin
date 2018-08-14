@@ -76,6 +76,18 @@ class product extends Component {
             })
     }
 
+    KTGSearch(i){
+        var url = `http://localhost:3222/searchbyKTG/${i}`
+        Axios.get(url,{
+            idkategori: i ,
+        }).then((respon)=>{
+            
+            this.setState({
+                dataBackend: respon.data
+            })
+        })
+    }
+
     render() {
         const { redirect_home } = this.state;
         if (redirect_home) {
@@ -102,6 +114,9 @@ class product extends Component {
                         </button>
                         <button onClick={() => { this.deletekategori(id) }} >
                             delete
+                        </button>
+                        <button onClick={()=>{ this.KTGSearch(id)}}>
+                            Search
                         </button>
                     </td>
                 </tr>

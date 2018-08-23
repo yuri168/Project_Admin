@@ -7,6 +7,7 @@ import editProduct from './komponen/edit.js'
 import Invoice from './komponen/invoice.js'
 import Detail from './komponen/detailinv.js'
 import Kategori from './komponen/kategori.js'
+import Reporting from './komponen/reporting.js'
 import ReduxThunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux'; //tambahan
@@ -28,6 +29,7 @@ class App extends Component {
         <Route path="/detail" component={Detail}/>
         <Route path="/kategori" component={Kategori}/>
         <Route path="/editkategori" component={editkategori}/>
+        <Route path="/Reporting" component={Reporting}/>
       </div>
       </ Provider>
     );

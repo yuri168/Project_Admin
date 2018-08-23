@@ -242,7 +242,12 @@ class product extends Component {
                             Detail Invoice
                     </Link>
                     </button>
-
+                    <br />
+                    <button>
+                        <Link to="/Reporting">
+                            Reporting
+                        </Link>
+                    </button>
                 </div>
             </div>
         );

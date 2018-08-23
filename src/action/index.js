@@ -1,3 +1,4 @@
+// admin
 export const productID = (x) =>{
     return{
         type: 'idProduct',
